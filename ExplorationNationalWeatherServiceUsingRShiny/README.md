@@ -1,9 +1,4 @@
-# COST-DataExpo-2018
+# JSM-2018-Weather-App
+This R shiny App was built to visualize and explore the data from the National Weather Services.
 
-
-
-This site will contain files, data, code for papers to be published in a special issue of Computational Statistics (after the final referee process).
-
-
-
-These papers describe analyses conducted by contestants in the Data Challenge Expo 2018.
+For initial use, please download the dataset via: https://drive.google.com/file/d/1Ly684TNLf78dJv2T3sCYp3eiqugtJEl7/view?usp=sharing.
