@@ -1,9 +1,3 @@
-# COST-DataExpo-2018
+# Code repository for "Spatial Correlation in Weather Forecast Accuracy: A Functional Time Series Approach"
 
-
-
-This site will contain files, data, code for papers to be published in a special issue of Computational Statistics (after the final referee process).
-
-
-
-These papers describe analyses conducted by contestants in the Data Challenge Expo 2018.
+"main.m" is the master script which contains all calculations and visualizations.
