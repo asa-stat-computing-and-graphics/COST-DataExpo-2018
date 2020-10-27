@@ -13,10 +13,7 @@ library(dplyr)
 library(lubridate)
 library(tidyr)
 
-forecast <- read.table("../../data/forecast.dat")
-head(forecast)
-colnames(forecast) <- c("city", "fdate", "value", "type", "date")
-summary(forecast)
+forecast <- readRDS("../../data/forecast.rds")
 
 forecast$fdate <- as.Date(as.character(forecast$fdate), format = "%Y-%m-%d")
 forecast$date <- as.Date(as.character(forecast$date), format = "%Y-%m-%d")
@@ -208,8 +205,7 @@ summary(tmp3)
 # minimum temperature. Those readings would probably be faulty anyway. 
 tmp3 <- tmp3 %>% filter(lag < 6)
 
-write.csv(tmp3, "../../data/final_forecast.csv", 
-          quote = FALSE, row.names = FALSE)
+saveRDS(tmp3, "../../data/final_forecast.rds")
 
 
 

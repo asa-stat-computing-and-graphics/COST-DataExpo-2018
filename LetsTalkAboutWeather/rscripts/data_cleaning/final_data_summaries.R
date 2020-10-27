@@ -50,7 +50,7 @@ ovProp <- weather %>%
 
 weather <- left_join(weather, ovProp, by = "AirPtCd")
 
-forecast <- read.csv("../../data/final_forecast.csv")
+forecast <- readRDS("../../data/final_forecast.rds")
 head(forecast)
 forecast$fdate <- as.Date(as.character(forecast$fdate), format = "%Y-%m-%d")
 forecast$date <- as.Date(as.character(forecast$date), format = "%Y-%m-%d")
