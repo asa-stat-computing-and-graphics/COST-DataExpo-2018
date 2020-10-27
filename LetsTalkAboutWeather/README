@@ -65,7 +65,7 @@ information or to fill in missing data are described later.
 
 ## Primary data files
 
-# forecast.dat: original forecast dataset provided by the Data Expo. 
+# forecast.rds: original forecast dataset provided by the Data Expo. 
 
 # histWeather.csv: original weather dataset provided by the Data Expo. 
 
@@ -100,7 +100,7 @@ are needed to create the clusters and many of the graphics.
 
 # final_weather.csv: created with observation_final_clean.R
 
-# final_forecast.csv: created with forecast_final_clean.R. Contains the
+# final_forecast.rds: created with forecast_final_clean.R. Contains the
 cleaned weather forecasts in long form. It is generated from the forecast.dat
 file provided by the Data Expo. 
 

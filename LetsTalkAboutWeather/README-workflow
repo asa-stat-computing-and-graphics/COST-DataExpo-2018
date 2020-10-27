@@ -11,8 +11,8 @@ final_weather.csv
 Note: set working directory to source file
 
 1. forecast_final_clean.R
-   inputs files: forecast.dat, locations.csv
-   output files: final_forecast.csv
+   inputs files: forecast.rds, locations.csv
+   output files: final_forecast.rds
 2. observation_final_clean.R
    inputs files: histWeather.csv, DenverPrecip.csv, baltWind.csv
    output files: final_weather.csv
@@ -21,7 +21,7 @@ Note: set working directory to source file
    output files: locationsFinal_preclust.csv
 4. final_data_summaries.R
    inputs files: locationsFinal_preclust.csv, final_weather.csv, 
-                 final_forecast.csv
+                 final_forecast.rds
    output files: summary_city_month_lag.csv, summary_city_month.csv, 
                  summary_city_lag.csv, summary_city.csv, 
 				 summary_lag_shiny.csv
