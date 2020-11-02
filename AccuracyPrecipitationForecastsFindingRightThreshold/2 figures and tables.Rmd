@@ -1,0 +1,359 @@
+# 2. Figures
+
+Most of the graphics along with Table 1 are created here. Has some dataframe creation for specific graphics.
+
+A folder named "pics" needs to be created in the same directory as this script or else the save functions will error.
+
+```{r}
+library(gridExtra)
+```
+
+## Fig 2:  Different cut points
+As a loop to look at all different cutpoints (bc .01 in. of rain may not be noticeable)
+
+precip_acc is all cities averaged together. This is used in Fig 2.
+
+```{r}
+precip_acc <- tibble(ProbPrecip_forecast=seq(0,100,10))
+j <- 2
+
+for (i in seq(0, .10, .01)){
+  weather_export2 <- weather_export %>% 
+    mutate(Precip = PrecipIn >= i)
+  
+  weather_export2 <- as.data.table(weather_export2)
+  
+  pa <- weather_export2[,j=list(mean(Precip, na.rm=T)*100),
+                       by=list(ProbPrecip_forecast)] %>% 
+    arrange(ProbPrecip_forecast)
+  
+  precip_acc <- cbind(precip_acc, pa[,2])
+  
+  colnames(precip_acc)[j] <- paste("cp",i,sep="")
+  
+  j <- j+1
+}
+
+precip_acc[,-1] <- round(precip_acc[,-1],2)
+```
+
+
+Colors have to be alphabetical.
+
+```{r}
+p1 <- ggplot(precip_acc) +
+  geom_line(aes(x=ProbPrecip_forecast, y=cp0.01, color="#386cb0"), size=.8) +
+  geom_line(aes(x=ProbPrecip_forecast, y=cp0.06, color="#7fc97f"), size=.8) +
+  geom_line(aes(x=ProbPrecip_forecast, y=cp0.07, color="orange"), size=.8) +
+  geom_line(aes(x=ProbPrecip_forecast, y=cp0.08, color="tan"), size=.8) +
+  geom_abline(size=.8, linetype="dashed") +
+  theme_light() +
+  scale_colour_manual(name = 'cut point', 
+         values =c('#386cb0'='#386cb0','#7fc97f'='#7fc97f','orange'='orange', 'tan'='tan'), 
+         labels = c('cp0.01','cp0.06','cp0.07','cp0.08')) +
+  scale_x_continuous(breaks = seq(0,100,20),labels=paste0(seq(0,100,20),'%')) +
+  scale_y_continuous(breaks = seq(0,100,20),labels=paste0(seq(0,100,20),'%')) +
+  labs(x="Expected Proportion of Rainy Days", y="Actual Proportion of Rainy Days") +
+  theme(axis.title.x = element_text(size=17),
+        axis.title.y = element_text(size=17),
+        axis.text.x = element_text(size=14),
+        axis.text.y = element_text(size=14))
+
+p1
+
+ggsave('pics/fig02 different cut points.jpeg', plot=p1, width=8, height=5.5)
+```
+
+Fig 2 without legend
+
+```{r}
+ggplot(precip_acc) +
+  geom_line(aes(x=ProbPrecip_forecast, y=cp0.01), color="#386cb0", size=.8) +
+  geom_line(aes(x=ProbPrecip_forecast, y=cp0.06), color="#7fc97f", size=.8) +
+  geom_line(aes(x=ProbPrecip_forecast, y=cp0.07), color="orange", size=.8) +
+  geom_line(aes(x=ProbPrecip_forecast, y=cp0.08), color="tan", size=.8) +
+  geom_abline(size=.8, linetype="dashed") +
+  theme_light() +
+  scale_x_continuous(breaks = seq(0,100,20), labels=paste0(seq(0,100,20),'%')) +
+  scale_y_continuous(breaks = seq(0,100,20), labels=paste0(seq(0,100,20),'%')) +
+  labs(x="Expected Proportion of Rainy Days", y="Actual Proportion of Rainy Days") +
+  theme(axis.title.x = element_text(size=17),
+        axis.title.y = element_text(size=17),
+        axis.text.x = element_text(size=14),
+        axis.text.y = element_text(size=14))
+```
+
+
+## Table 1: MARE by city
+
+Code for Table 1. Calculate MARE by city for cut point = 0.01.
+
+```{r}
+table_1 <- rain_metrics[,c('city','re','re_rank')] %>% arrange(city)
+
+write.csv(table_1,'data/table01 rain error.csv')
+```
+
+
+## Fig 4: Forecast horizon and Rain Error
+
+Visualize extent to which forecast horizon (Days Out) affects forecast accuracy.
+
+Filter dataset by DO 0 through 6 and aggregate.
+
+```{r}
+# Create new dataset for Days Out analysis.
+precip_acc_do <- tibble(ProbPrecip_forecast=seq(0,100,10))
+j <- 2
+
+for (i in seq(0, 6)){
+  weather_export_do <- weather_export %>% 
+    filter(Days_out==i) %>% 
+    mutate(Precip = PrecipIn >= 0.01) %>% 
+    as.data.table()
+  
+  pa <- weather_export_do[,j=list(round(mean(Precip, na.rm=T)*100, 2)),
+                       by=list(ProbPrecip_forecast)] %>% 
+    arrange(ProbPrecip_forecast)
+  
+  # 6 DO has no forecasts of 100%
+  if (i==6){
+    pa <- rbind(pa, tibble(ProbPrecip_forecast=100,V1=NA))
+  }
+  
+  precip_acc_do <- cbind(precip_acc_do, pa[,2])
+  
+  colnames(precip_acc_do)[j] <- paste("do",i,sep="")
+  
+  j <- j+1
+}
+
+#Be mindful of parenthesis in geom_line with regards to color, as well as scale_colour_manual alphabetizing colors.
+
+p1 <- ggplot(precip_acc_do) +
+  geom_line(aes(x=ProbPrecip_forecast, y=do0,
+            color="#d0d1e6"), size=.8) +
+  geom_line(aes(x=ProbPrecip_forecast, y=do1,
+            color="#a6bddb"), size=.8) +
+  geom_line(aes(x=ProbPrecip_forecast, y=do2,
+            color="#67a9cf"), size=.8) +
+  geom_line(aes(x=ProbPrecip_forecast, y=do3,
+            color="#3690c0"), size=.8) +
+  geom_line(aes(x=ProbPrecip_forecast, y=do4,
+            color="#02818a"), size=.8) +
+  geom_line(aes(x=ProbPrecip_forecast, y=do5,
+            color="#016c59"), size=.8) +
+  geom_line(aes(x=ProbPrecip_forecast, y=do6,
+            color="#014636"), size=.8) +
+  geom_abline(size=.8, linetype="dashed") +
+  theme_light() +
+  scale_colour_manual(name = 'Days Out', 
+         values =c('#d0d1e6'='#d0d1e6','#a6bddb'='#a6bddb','#67a9cf'='#67a9cf', '#3690c0'='#3690c0','#02818a'='#02818a','#016c59'='#016c59', '#014636'='#014636'), 
+         labels = c('6','5','4','3','2','1','0')) +
+  scale_x_continuous(breaks = seq(0,100,20)) +
+  scale_y_continuous(breaks = seq(0,100,20)) +
+  labs(x="Expected Proportion of Rainy Days", y="Actual Proportion of Rainy Days") +
+  theme(axis.title.x = element_text(size=17),
+        axis.title.y = element_text(size=17),
+        axis.text.x = element_text(size=14),
+        axis.text.y = element_text(size=14))
+
+ggsave('pics/fig04 days out.jpeg', plot=p1, width=8, height=5.5)
+```
+
+Table of RE by DO
+
+```{r}
+mean(abs(precip_acc_do$ProbPrecip_forecast - precip_acc_do$do0), na.rm=T)
+
+re_table_do <- tibble(
+  re0 = mean(abs(precip_acc_do$ProbPrecip_forecast - precip_acc_do$do0), na.rm=T),
+  re1 = mean(abs(precip_acc_do$ProbPrecip_forecast - precip_acc_do$do1), na.rm=T),
+  re2 = mean(abs(precip_acc_do$ProbPrecip_forecast - precip_acc_do$do2), na.rm=T),
+  re3 = mean(abs(precip_acc_do$ProbPrecip_forecast - precip_acc_do$do3), na.rm=T),
+  re4 = mean(abs(precip_acc_do$ProbPrecip_forecast - precip_acc_do$do4), na.rm=T),
+  re5 = mean(abs(precip_acc_do$ProbPrecip_forecast - precip_acc_do$do5), na.rm=T),
+  re6 = mean(abs(precip_acc_do$ProbPrecip_forecast - precip_acc_do$do6), na.rm=T)
+)
+```
+## Correlation between Number of Rainy Days and MARE
+
+```{r}
+cor(rain_metrics[,c("rainy_days_py","re")])
+psych::corr.test(rain_metrics[,c("rainy_days_py","re")])
+
+# cor with top 5 raniest cities removed
+rain_metrics <- rain_metrics %>% arrange(desc(rainy_days_py))
+cor(rain_metrics[-(1:5),c("rainy_days_py","re")])
+psych::corr.test(rain_metrics[-(1:5),c("rainy_days_py","re")])
+```
+
+
+## Fig 5: Scatter of Number of Rainy Days by MARE
+
+Scatter
+
+```{r}
+p1 <- ggplot(rain_metrics) +
+  geom_point(aes(x=rainy_days_py, y=re), size=2) +
+  theme_bw() +
+  labs(x="Number of Rainy Days in a Year", y="Mean Absolute Rain Error") +
+  theme(axis.title.x = element_text(size=17),
+        axis.title.y = element_text(size=17),
+        axis.text.x = element_text(size=14),
+        axis.text.y = element_text(size=14),
+        legend.text=element_text(size=14))
+
+p1
+
+ggsave('pics/fig05 mare by nbr rainy days.jpeg', plot=p1,width=7, height=6)
+```
+
+
+## Fig 6: Least accurate cities (Blue purple graphs)
+
+Comparing rainy days per year and inches of rain per rainy day for highest Rain Error cities.
+
+```{r}
+rain_graph <- rain_metrics
+
+# Normalize
+rain_graph[,c("rainy_days_py","avg_precip_in")] <- lapply(rain_graph[,c("rainy_days_py","avg_precip_in")],scale)
+
+# Wide to long
+rain_graph <- melt(rain_graph[,c("city","re","rainy_days_py","avg_precip_in")], id=c("city", "re"))
+
+
+# without legend
+rhg_cols <- c("#386cb0", "#beaed4")
+
+# Top 10 RE cities. Use n=20 because dataset is long format with 2 vars.
+p1 <- ggplot(rain_graph %>% top_n(20,re)) + 
+  geom_bar(mapping=aes(x=reorder(city, re), y=value, fill=variable), stat="identity", position="dodge") +
+  labs(y="Normalized values", x=NULL) +
+  theme_bw() + 
+  scale_fill_manual(values = rhg_cols, name=NULL, labels=c("Normalized avg nbr of rainy days per yr","Normalized avg in. of precipitation per rainy day")) +  
+  scale_y_continuous(minor_breaks = NULL) +
+  theme(axis.title.x = element_text(size=17),
+        axis.title.y = element_text(size=17),
+        axis.text.x = element_text(size=14, angle=315, hjust=.1),
+        axis.text.y = element_text(size=14),
+        legend.text=element_text(size=10),
+        legend.position='bottom')
+
+p1
+
+ggsave('pics/fig06 most accurate cities bar.jpeg', plot=p1, width=8.5, height=6)
+```
+
+
+
+
+## Fig 7: Most accurate cities
+
+Comparing rainy days per year and inches of rain per rainy day for lowest Rain Error cities.
+
+```{r}
+# Top 10 most accurate cities (lowest RE).
+# without legend
+rhg_cols <- c("#386cb0", "#beaed4")
+
+p1 <- ggplot(rain_graph %>% top_n(20,desc(re))) + 
+  geom_bar(mapping=aes(x=reorder(city, re), y=value, fill=variable), stat="identity", position="dodge") +
+  labs(y="Normalized values", x=NULL) +
+  theme_bw() + 
+  scale_fill_manual(values = rhg_cols, name=NULL, labels=c("Normalized avg nbr of rainy days per yr","Normalized avg in. of precipitation per rainy day")) +  
+  scale_y_continuous(minor_breaks = NULL, limits=c(-2,1)) +
+  theme(axis.title.x = element_text(size=17),
+        axis.title.y = element_text(size=17),
+        axis.text.x = element_text(size=14, angle=315, hjust=0.1),
+        axis.text.y = element_text(size=14),
+        legend.text=element_text(size=10),
+        legend.position = 'bottom')
+
+p1
+
+ggsave('pics/fig07 least accurate cities bar.jpeg', plot=p1, width=8.5, height=6)
+```
+
+
+## Fig 10: Expected Proportion of Rainy Days vs Actual Proportion by City
+
+Functions to generate graphs and then save them as jpeg in "pics" folder.
+
+Vectors of Most and Least Accurate Cities
+
+c("Springfield", "Portland", "Hoquiam", "Honolulu", "Charleston", "Miami", "San Francisco", "Sault Ste Marie", "Wilmington", "Grand Junction")
+
+c("Honolulu", "Salmon", "Carlsbad", "Provo", "Baker", "St George", "Helena", "Santa Fe", "Needles", "Anchorage", "San Diego")
+
+
+```{r}
+# Graph generator function
+
+rain_graph <- function(df, legend=T){
+  if (legend==T) {
+    ggplot(df) +
+    geom_line(aes(x=ProbPrecip_forecast, y=cp0.01, color="#386cb0"), size=.8) +
+    geom_line(aes(x=ProbPrecip_forecast, y=cp0.07, color="orange"), size=.8) +
+    geom_abline(size=.8, linetype="dashed") +
+    ggtitle(df$city[1]) +
+    theme_light() +
+    scale_colour_manual(name = 'cut point', 
+           values =c('#386cb0'='#386cb0','orange'='orange'), 
+           labels = c('cp0.01','cp0.07')) +
+    scale_x_continuous(breaks = seq(0,100,20)) +
+    scale_y_continuous(breaks = seq(0,100,20)) +
+    labs(x="Expected Proportion of Rainy Days", y="Actual Proportion of Rainy Days") +
+    theme(axis.title.x = element_text(size=12),
+          axis.title.y = element_text(size=12),
+          axis.text.x = element_text(size=14),
+          axis.text.y = element_text(size=14),
+          plot.title = element_text(size = 17, face = "bold"))
+    
+  } else {
+    ggplot(df) +
+    geom_line(aes(x=ProbPrecip_forecast, y=cp0.01), color="#386cb0", size=.8) +
+    geom_line(aes(x=ProbPrecip_forecast, y=cp0.07), color="orange", size=.8) +
+    geom_abline(size=.8, linetype="dashed") +
+    ggtitle(df$city[1]) +
+    theme_light() +
+    scale_x_continuous(breaks = seq(0,100,20)) +
+    scale_y_continuous(breaks = seq(0,100,20)) +
+    labs(x="Expected Proportion of Rainy Days", y="Actual Proportion of Rainy Days") +
+    theme(axis.title.x = element_text(size=12),
+          axis.title.y = element_text(size=12),
+          axis.text.x = element_text(size=14),
+          axis.text.y = element_text(size=14),
+          plot.title = element_text(size = 17, face = "bold"))
+  }
+}
+
+# Requires a pics folder to already exist
+rain_graph_duo <- function(city1, city2, fig_num="", save_jpeg=T){
+  df1 <- filter(precip_acc_city_pop, city == city1)
+  p1 <- rain_graph(df1,legend=F)
+  df2 <- filter(precip_acc_city_pop, city == city2)
+  p2 <- rain_graph(df2,legend=T)
+  
+  p_grid <- grid.arrange(p1,p2, nrow=1, ncol=2, widths=c(2.5,3))
+  
+  jpeg_filepath <- paste("pics/",fig_num," ", city1, " ", city2, ".jpeg", sep = "")
+
+# save is here  
+  if (save_jpeg==T){
+    ggsave(jpeg_filepath, plot=p_grid, width=12, height=5.5)
+  } else {p_grid}
+}
+
+```
+
+Run graph generators.
+
+```{r}
+rain_graph_duo("Seattle","Sacramento","fig08")
+
+rain_graph_duo("Honolulu","Salmon","fig09")
+
+rain_graph_duo("Springfield","Portland","fig10")
+```

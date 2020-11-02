@@ -1,0 +1,183 @@
+# 3. Maps
+
+This file generates the map png's.
+
+```{r, message=F}
+library(maptools); library(sp); library(gstat); library(ggplot2); library(png); library(readr); library(tidyverse)
+
+states <- readShapePoly("data/statesp020.shp")
+```
+
+## Fig 1: Blue Map
+
+Generate Single Map for blue. There are some big outliers that reduce the precision of the colors. Floor/ceiling points that are outside [.025, .975].
+
+```{r}
+generate_blue_map <- function(df, map_name="some map"){
+  # min/max coords of the interpolation area
+  x.range <- as.numeric(c(-127, -65))
+  y.range <- as.numeric(c(23, 51))
+  
+  grd <- expand.grid(x = seq(from = x.range[1], to = x.range[2], by = 0.1), y = seq(from = y.range[1], 
+      to = y.range[2], by = 0.1))  # creates grid of points, according to grid extent
+  coordinates(grd) <- ~x + y
+  gridded(grd) <- TRUE #promotes non-gridded structure to gridded
+  
+  # Here dataset is read
+  ds_coords <- df
+  coordinates(ds_coords) <- ~long + lat
+  
+  # Calculate interpolation
+  idw <- idw(formula = re ~ 1, locations = ds_coords, 
+    newdata = grd)
+
+  idw.output <- as.data.frame(idw)
+  names(idw.output)[1:3] <- c("long", "lat", "var1.pred")
+  
+  idw.output <- idw.output[ , -4]
+  
+  m <- ggplot() + 
+  geom_tile(data = idw.output, alpha = 0.8, aes(x = long, y = lat, 
+    fill = round(var1.pred, 0))) + 
+  coord_cartesian(xlim = c(-127, -65), ylim = c(23, 51)) +
+  scale_fill_gradientn(colors = c("white","white", "#92c5de", "#0571b0", "#034063"),
+                       limits = c(-5,30)) + 
+  geom_path(data = states, aes(long, lat, group = group), colour = "grey") +
+  geom_point(data = df, aes(x = long, y = lat), shape = 21, 
+        colour = "red") + 
+  geom_text(data = df, aes(label=city, x = long, y = lat), 
+            size=1.6, nudge_x = 1.9, nudge_y = .1) +
+  labs(fill = "Rain Error") +
+  theme(legend.position = c(.4, .02), #(x,y)
+        legend.direction = "horizontal",
+        legend.text = element_text(size=9),
+        legend.title = element_text(size=17),
+        plot.margin=grid::unit(c(-3,-8.5, 6,-8.8), "mm"),
+        axis.line=element_blank(),
+        axis.text.x=element_blank(),
+        axis.text.y=element_blank(),
+        axis.ticks=element_blank(),
+        axis.title.x=element_blank(),
+        axis.title.y=element_blank(),
+        panel.background=element_blank(),
+        panel.border=element_blank(),
+        panel.grid.major=element_blank(),
+        panel.grid.minor=element_blank(),
+        plot.background=element_blank())
+  
+  writeLines("Saving in pics folder...")
+  ggsave(filename = paste(map_name, ".png", sep = ""), plot = m,
+    width = 18, height = 12, 
+     units = "cm", 
+     dpi = 300,
+    path = "pics")
+  writeLines("Finished")
+}
+```
+
+```{r}
+generate_blue_map(re_city_blue, "blue map")
+```
+
+## Fig 3: Red Maps
+Generate Single Map for red
+
+```{r}
+generate_red_map <- function(df, map_name="some map"){
+  # min/max coords of the interpolation area
+  x.range <- as.numeric(c(-127, -65))
+  y.range <- as.numeric(c(23, 51))
+  
+  grd <- expand.grid(x = seq(from = x.range[1], to = x.range[2], by = 0.1), y = seq(from = y.range[1], 
+      to = y.range[2], by = 0.1))  # creates grid of points, according to grid extent
+  coordinates(grd) <- ~x + y
+  gridded(grd) <- TRUE #promotes non-gridded structure to gridded
+  
+  # Here dataset is read
+  ds_coords <- df
+  coordinates(ds_coords) <- ~long + lat
+  
+  # Calculate interpolation
+  idw <- idw(formula = re ~ 1, locations = ds_coords, 
+    newdata = grd)
+
+  idw.output <- as.data.frame(idw)
+  names(idw.output)[1:3] <- c("long", "lat", "var1.pred")
+  
+  idw.output <- idw.output[ , -4]
+  
+  m <- ggplot() + 
+  geom_tile(data = idw.output, alpha = 0.8, aes(x = long, y = lat, 
+    fill = round(var1.pred, 0))) + 
+  coord_cartesian(xlim = c(-127, -65), ylim = c(23, 51)) +
+  scale_fill_gradientn(colors = c("#FFFFFF","#FFFFFF","#FFFFFF", "#fff7ec", "#fee8c8", "#fdd49e", "#fdbb84", "#fc8d59", "#ef6548",
+                                  "#d7301f", "#b30000", "#7f0000"), limits = c(0,30)) + 
+  geom_path(data = states, aes(long, lat, group = group), colour = "grey") +
+  geom_point(data = df, aes(x = long, y = lat), shape = 21, 
+        colour = "red") + 
+  geom_text(data = df, aes(label=city, x = long, y = lat), 
+            size=3, nudge_x = 3, nudge_y = .1) +
+  labs(fill = "Mean Absolute Rain Error") +
+  theme(legend.position = c(.4, .02), #(x,y)
+        legend.direction = "horizontal",
+        legend.text = element_text(size=14),
+        legend.title = element_text(size=17),
+        plot.margin=grid::unit(c(-3,-8.5, 6,-8.8), "mm"),
+        axis.line=element_blank(),
+        axis.text.x=element_blank(),
+        axis.text.y=element_blank(),
+        axis.ticks=element_blank(),
+        axis.title.x=element_blank(),
+        axis.title.y=element_blank(),
+        panel.background=element_blank(),
+        panel.border=element_blank(),
+        panel.grid.major=element_blank(),
+        panel.grid.minor=element_blank(),
+        plot.background=element_blank())
+  
+  writeLines("Saving in pics folder...")
+  ggsave(filename = paste(map_name, ".png", sep = ""), plot = m,
+    width = 18, height = 12, 
+     units = "cm", 
+     dpi = 300,
+    path = "pics")
+  writeLines("Finished")
+}
+```
+
+```{r}
+# Delete the following line to include all city names
+re_city_red_01$city[!re_city_red_01$city %in% c("Springfield",
+"Portland",
+"Hoquiam",
+"Charleston",
+"Sault Ste Marie",
+"Duluth",
+"Eugene",
+"Miami",
+"Montpelier",
+"North Platte"
+)] <- NA
+
+generate_red_map(re_city_red_01, "red map 01")
+```
+
+For 0.07 red map
+
+```{r}
+# Delete the following line to include all city names
+re_city_red_07$city[!re_city_red_07$city %in% c("Springfield",
+"Portland",
+"Hoquiam",
+"Charleston",
+"Sault Ste Marie",
+"Duluth",
+"Eugene",
+"Miami",
+"Montpelier",
+"North Platte"
+)] <- NA
+
+# Change file name in function definition.
+generate_red_map(re_city_red_07, "red map 07")
+```
