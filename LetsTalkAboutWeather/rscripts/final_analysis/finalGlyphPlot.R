@@ -5,14 +5,13 @@ library(RColorBrewer)
 library(grid)
 library(gridExtra)
 library(gtable)
-library(fiftystater)
 library(reshape2)
 library(mapproj)
 
 # library(cowplot) # don't load explicitly as it changes default ggplot themes
 
 # Project the 50 states and use the coordinates. 
-data("fifty_states") # this line is optional due to lazy data loading
+load("../../data/fifty_states.RData")
 
 # Load summarized data set (by month)
 weatherSum <- read.csv("../../data/summary_city_month.csv")
@@ -48,7 +47,7 @@ weatherSum$latitude2 <- tcoords$y[coordDF$id == 2]
 locations$longitude2 <- tcoords$x[coordDF$id == 3]
 locations$latitude2 <- tcoords$y[coordDF$id == 3]
 
-weatherSum$dRad <- (pi/2) - ( ((2*pi)/12) * (weatherSum$month - 1) )
+weatherSum$dRad <- (pi / 2) - ( ((2*pi) / 12) * (weatherSum$month - 1) )
 
 # Create a scaled version of the BSS ratio
 weatherSum$sBSS <- 1-weatherSum$BSS
@@ -699,7 +698,7 @@ legend <- ggplot(boxes, aes(x = x, y = y)) +
         axis.ticks = element_blank())
 #=============================================================================
 
-pdf("../../images/final/paper/glyphFinal2.pdf", width = 20, height = 30)
+pdf("../../images/final/paper/Fig6_glyphFinal2.pdf", width = 20, height = 30)
 grid.arrange(grobs = list(ggplotGrob(map8.2), ggplotGrob(tglyph.2), 
                           ggplotGrob(tglyph2.2), ggplotGrob(tglyph3.2), 
                           ggplotGrob(map.2), ggplotGrob(legend)), 

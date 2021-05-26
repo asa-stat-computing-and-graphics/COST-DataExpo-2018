@@ -317,17 +317,17 @@ gmax <- ggplot(combined, aes(x = CleanVar, y = Importance)) +
 # gmax
 # dev.off()
 
-pdf("../../images/final/finalImportance_slides.pdf", height = 5, width = 8)
-gmax
-dev.off()
-
-pdf("../../images/final/finalImportance.pdf", height = 5, width = 15)
-gmax
-dev.off()
-
-pdf("../../images/test/VI Parallel Coordinate Plot2.pdf", height = 6.5, width = 25)
-gmax
-dev.off()
+# pdf("../../images/final/finalImportance_slides.pdf", height = 5, width = 8)
+# gmax
+# dev.off()
+# 
+# pdf("../../images/final/finalImportance.pdf", height = 5, width = 15)
+# gmax
+# dev.off()
+# 
+# pdf("../../images/test/VI Parallel Coordinate Plot2.pdf", height = 6.5, width = 25)
+# gmax
+# dev.off()
 
 
 write.csv(combined, "../../data/Importance_Data.csv", row.names = FALSE)
@@ -349,9 +349,9 @@ gmax2 <- ggplot(combined, aes(x = CleanVar, y = Importance)) +
     axis.text.y = element_text(size = 12),
     axis.title.y = element_text(size = 12)) 
 
-pdf("../../images/final/paper/finalImportance_Paper.pdf", height = 6, width = 10)
-gmax2
-dev.off()
+# pdf("../../images/final/paper/finalImportance_Paper.pdf", height = 6, width = 10)
+# gmax2
+# dev.off()
 
 
 #=============================================================================
@@ -402,7 +402,7 @@ gmax2 <- ggplot(combined, aes(x = CleanVar, y = Importance)) +
     axis.title.y = element_text(size = 12)) 
 
 
-pdf("../../images/final/paper/finalImportance.pdf", height = 6, width = 10)
+pdf("../../images/final/paper/Fig7_finalImportance.pdf", height = 6, width = 10)
 grid.draw(rbind(ggplotGrob(gmax2), ggplotGrob(legend), size = "first"))
 dev.off()
 

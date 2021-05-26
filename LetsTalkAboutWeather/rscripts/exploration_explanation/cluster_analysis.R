@@ -7,7 +7,6 @@ library(cluster)
 library(fpc)
 library(ggplot2)
 library(ggmap)
-library(fiftystater)
 library(maps)
 library(RColorBrewer)
 library(gridExtra)
@@ -18,6 +17,7 @@ library(gridExtra)
 #            all of the dendrograms
 #
 source("cluster_functions.R")
+load("../../data/fifty_states.RData")
 
 ###############################################################################
 #
@@ -90,7 +90,7 @@ plot(1:10, wss, type = "b", xlab = "Number of Clusters",
 # K-Means Cluster Analysis using kmeans
 fit <- kmeans(cc2, 8) # 8 cluster solution
 # get cluster means 
-aggregate(cc2, by = list(fit$cluster),FUN = mean)
+aggregate(cc2, by = list(fit$cluster), FUN = mean)
 # append cluster assignment
 mydata <- data.frame(cc2, fit$cluster)
 

@@ -5,10 +5,11 @@ library(cluster)
 library(fpc)
 library(ggplot2)
 library(ggmap)
-library(fiftystater)
 library(maps)
 library(RColorBrewer)
 library(gridExtra)
+
+load("../../data/fifty_states.RData")
 
 ################ Functions for creating clusters
 
@@ -26,16 +27,16 @@ library(gridExtra)
 # the clustered dataset found in the Data folder. The command to call
 # it is 
 # cluster = read.csv("../Data/Combined_for_Clustering.csv")
-# The user also specifies the name of the file that the dendrams will
+# The user also specifies the name of the file that the dendrogams will
 # be written. The output is a pdf of the dendrograms for all of the 
 # clustering methods allowed in hclust.
 
 fastClust <- function(dat, distType = "euclidean", nms = paste(cluster$city, cluster$state, sep = ", "),
-                     graphName = NULL) {
+                      graphName = NULL) {
   
   clusters <- vector("list", 8)
   method <- c("ward.D", "ward.D2", "single", "complete", "average", 
-             "mcquitty", "median", "centroid")
+              "mcquitty", "median", "centroid")
   
   d <- dist(dat, method = distType) # distance matrix
   
@@ -73,7 +74,7 @@ kmean <- function(dat) {
 hcc <- function(dat, type) {
   tmp <- fastClust(dat, type)
   method <- c("ward.D", "ward.D2", "single", "complete", "average", 
-             "mcquitty", "median", "centroid")
+              "mcquitty", "median", "centroid")
   clust <- vector("list", 8)
   for(i in 1:8) {
     clust[[i]] <- matrix(0, nrow = nrow(dat), ncol = 6)
@@ -102,7 +103,7 @@ clust.plot <- function(trimDat, clust, Plot.title, top = NULL) {
     
     cols <- brewer.pal(i + 3, "Set1")
     tmp$clust.col <- as.factor(tmp[, i + 3])
-
+    
     clustGraphs[[i]] <- ggplot(tmp, aes(map_id = state)) +
       # map points to the fifty_states shape data
       geom_map(fill = "gray90", color = "black", map = fifty_states) +
@@ -114,8 +115,8 @@ clust.plot <- function(trimDat, clust, Plot.title, top = NULL) {
       theme(legend.position = "bottom",
             panel.background = element_blank()) +
       geom_point(aes(x = longitude, y = latitude,
-                                 colour = clust.col),
-                             data = tmp, show.legend = FALSE) +
+                     colour = clust.col),
+                 data = tmp, show.legend = FALSE) +
       scale_colour_manual(values = cols) +
       ggtitle(paste(Plot.title, i + 3, "clusters", sep = " "))
   }
@@ -145,12 +146,12 @@ clustPlot <- function(dat = cc, trimDat = cluster[, c(33:35)], type = "K-means")
   } else {
     tmp <- hcc(dat, type)
     method <- c("ward.D", "ward.D2", "single", "complete", "average", 
-               "mcquitty", "median", "centroid")
+                "mcquitty", "median", "centroid")
     for(i in 1:8) {
       clust.plot(trimDat, tmp[[i]], type, method[i])
     }
   }
 }
-  
+
 
 

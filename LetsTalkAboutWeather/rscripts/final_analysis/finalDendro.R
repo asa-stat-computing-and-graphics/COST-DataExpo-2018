@@ -5,7 +5,6 @@ library(cluster)
 library(fpc)
 library(ggplot2)
 library(ggmap)
-library(fiftystater)
 library(maps)
 library(RColorBrewer)
 library(gridExtra)
@@ -60,18 +59,18 @@ clust.df <- data.frame(label = cluster2$name, cluster=factor(l2))
 dendr[["labels"]] <- merge(dendr[["labels"]],clust.df, by="label")
 # plot the dendrogram; note use of color=cluster in geom_text(...)
 p1 <- ggplot() + 
-  geom_segment(data=segment(dendr), aes(x=x, y=y, xend=xend, yend=yend)) + 
-  geom_text(data=label(dendr), aes(x, y, label=label, hjust=0, color=cluster), 
-            size=6) +
-  coord_flip() + scale_y_reverse(expand=c(0, 0), limits = c(40, -15)) + 
+  geom_segment(data = segment(dendr), aes(x = x, y = y, xend = xend, yend = yend)) + 
+  geom_text(data = dendr$labels, aes(x, y, label = label, hjust=0, 
+                                     color = cluster), size = 6) +
+  coord_flip() + scale_y_reverse(expand = c(0, 0), limits = c(40, -15)) + 
   scale_color_manual(values = set1) + 
   theme(legend.position = "none",
-    axis.line=element_blank(),
-        axis.ticks=element_blank(),
-        axis.text=element_blank(),
-        axis.title=element_blank(),
-        panel.background=element_rect(fill="white"),
-        panel.grid=element_blank())
+    axis.line = element_blank(),
+        axis.ticks = element_blank(),
+        axis.text = element_blank(),
+        axis.title = element_blank(),
+        panel.background = element_rect(fill="white"),
+        panel.grid = element_blank())
 #=============================================================================
 
 #=============================================================================
@@ -106,8 +105,8 @@ legend <- ggplot(boxes, aes(x = x, y = y)) +
         axis.ticks = element_blank())
 #=============================================================================
 
-pdf(height = 25, width = 10, file = "../../images/final/paper/finalDendro.pdf")
-#grid.arrange(grobs = list(ggplotGrob(p1), ggplotGrob(legend)), heights = c(0.9, 0.1))
+pdf(height = 25, width = 10, file = "../../images/final/paper/Fig2_finalDendro.pdf")
+# grid.arrange(grobs = list(ggplotGrob(p1), ggplotGrob(legend)), heights = c(0.95, 0.05))
 p1
 dev.off()
 

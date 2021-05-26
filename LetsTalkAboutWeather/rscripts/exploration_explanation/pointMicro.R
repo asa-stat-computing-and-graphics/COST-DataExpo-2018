@@ -8,12 +8,13 @@ library(cluster)
 library(fpc)
 library(ggplot2)
 library(ggmap)
-library(fiftystater)
 library(maps)
 library(RColorBrewer)
 library(gridExtra)
 library(grid)
 library(GGally)
+
+load("../../data/fifty_states.RData")
 
 cluster2 = read.csv("../../data/summary_city.csv")
 cluster <- cluster2

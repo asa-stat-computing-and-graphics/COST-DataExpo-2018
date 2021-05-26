@@ -5,11 +5,12 @@ library(cluster)
 library(fpc)
 library(ggplot2)
 library(ggmap)
-library(fiftystater)
 library(maps)
 library(RColorBrewer)
 library(gridExtra)
 library(grid)
+
+load("../../data/fifty_states.RData")
 
 cluster2 <- read.csv("../../data/summary_city.csv")
 cluster <- cluster2
@@ -87,7 +88,7 @@ p2 <- ggplot(tmp2, aes(map_id = state)) +
 p2
 dev.off()
 
-pdf("../../images/final/finalMap.pdf", width = 14, height = 10)
+# pdf("../../images/final/finalMap.pdf", width = 14, height = 10)
 p2 <- ggplot(tmp2, aes(map_id = state)) +
   # map points to the fifty_states shape data
   geom_map(fill = alpha("gray80", 0.5), color = alpha("gray60", 0.5), map = fifty_states) +
@@ -101,7 +102,7 @@ p2 <- ggplot(tmp2, aes(map_id = state)) +
   geom_point(data = tmp2, aes(x = longitude, y = latitude),
              fill = alpha(pal2[tmp2$Cluster], 0.8), size = 6, shape = I(21))
 p2
-dev.off()
+# dev.off()
 
 pdf("../../images/final/poster/finalMap_Slides.pdf", width = 14, height = 10)
 p3 <- ggplot(tmp2, aes(map_id = state)) +
@@ -155,7 +156,7 @@ legend <- ggplot(boxes, aes(x = x, y = y)) +
         axis.ticks = element_blank())
 #=============================================================================
 
-pdf("../../images/final/paper/finalMap.pdf", width = 14, height = 10)
+pdf("../../images/final/paper/Fig1_finalMap.pdf", width = 14, height = 10)
 grid.arrange(grobs = list(ggplotGrob(p2), ggplotGrob(legend)), heights = c(.9, .1))
 dev.off()
 

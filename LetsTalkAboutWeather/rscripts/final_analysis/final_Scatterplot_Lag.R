@@ -7,9 +7,10 @@ library(ggplot2)
 library(gridExtra)
 library(RColorBrewer)
 library(ggmap)
-library(fiftystater)
 library(grid)
 library(cowplot)
+
+load("../../data/fifty_states.RData")
 
 # Control the sizes of the labels and titles
 size1 <- 16 # Numbers
@@ -525,30 +526,30 @@ dev.off()
 # Final paper graphs
 #===========================================================================
 
-pdf("../../images/final/paper/ScatterTop1.pdf", height = 4, width = 11)
+pdf("../../images/final/paper/Fig5a_ScatterTop1.pdf", height = 4, width = 11)
 grid.draw(cbind(ggplotGrob(lagP1.l5), ggplotGrob(lagP1.l3), ggplotGrob(lagP1.l1), 
                 ggplotGrob(dummy1), size = "first"))
 dev.off()
 
-pdf("../../images/final/paper/ScatterBottom1.pdf", height = 5, width = 11)
+pdf("../../images/final/paper/Fig5a_ScatterBottom1.pdf", height = 5, width = 11)
 grid.arrange(g1, g4, widths = c(2, 4), ncol = 2)
 dev.off()
 
-pdf("../../images/final/paper/ScatterTop2.pdf", height = 4, width = 11)
+pdf("../../images/final/paper/Fig5b_ScatterTop2.pdf", height = 4, width = 11)
 grid.draw(cbind(ggplotGrob(lagP2.l5), ggplotGrob(lagP2.l3), ggplotGrob(lagP2.l1), 
                 ggplotGrob(dummy2), size = "first"))
 dev.off()
 
-pdf("../../images/final/paper/ScatterBottom2.pdf", height = 5, width = 11)
+pdf("../../images/final/paper/Fig5b_ScatterBottom2.pdf", height = 5, width = 11)
 grid.arrange(g2, g5, widths = c(2, 4), ncol = 2)
 dev.off()
 
-pdf("../../images/final/paper/ScatterTop3.pdf", height = 4, width = 11)
+pdf("../../images/final/paper/Fig5c_ScatterTop3.pdf", height = 4, width = 11)
 grid.draw(cbind(ggplotGrob(lagP3.l5), ggplotGrob(lagP3.l3), ggplotGrob(lagP3.l1), 
                 ggplotGrob(dummy3), size = "first"))
 dev.off()
 
-pdf("../../images/final/paper/ScatterBottom3.pdf", height = 5, width = 11)
+pdf("../../images/final/paper/Fig5c_ScatterBottom3.pdf", height = 5, width = 11)
 grid.arrange(g3, g6, widths = c(2, 4), ncol = 2)
 dev.off()
 
@@ -584,7 +585,7 @@ legend <- ggplot(boxes, aes(x = x, y = y)) +
         axis.title = element_blank(),
         axis.ticks = element_blank())
 
-pdf("../../images/final/paper/ScatterLegend.pdf", height = 1, width = 11)
+pdf("../../images/final/paper/Fig5d_ScatterLegend.pdf", height = 1, width = 11)
 legend
 dev.off()
 #=============================================================================

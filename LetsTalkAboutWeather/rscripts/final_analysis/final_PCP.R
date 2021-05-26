@@ -11,7 +11,6 @@ library(cluster)
 library(fpc)
 library(ggplot2)
 library(ggmap)
-library(fiftystater)
 library(maps)
 library(RColorBrewer)
 library(gridExtra)
@@ -179,7 +178,7 @@ legend <- ggplot(boxes, aes(x = x, y = y)) +
         axis.ticks = element_blank())
 #=============================================================================
 
-pdf("../../images/final/paper/finalPCP.pdf", width =  20, height = 8)
+pdf("../../images/final/paper/Fig3_finalPCP.pdf", width =  20, height = 8)
 # Grid.draw solution:
 # - https://gist.github.com/tomhopper/faa24797bb44addeba79
 grid.draw(rbind(rbind(ggplotGrob(p2), ggplotGrob(p1), size = "last"), ggplotGrob(legend), size = "first"))

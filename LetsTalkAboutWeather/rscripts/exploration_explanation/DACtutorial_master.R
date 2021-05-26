@@ -11,13 +11,12 @@ library(RColorBrewer)
 library(grid)
 library(gridExtra)
 library(gtable)
-library(fiftystater)
 library(reshape2)
 library(mapproj)
 # library(cowplot) # don't load explicitly as it changes default ggplot themes
 
 # Project the 50 states and use the coordinates. 
-data("fifty_states") # this line is optional due to lazy data loading
+load("../../data/fifty_states.RData")
 
 # Load summarized data set (by month)
 weatherSum <- read.csv("../../data/summary_city_month.csv")

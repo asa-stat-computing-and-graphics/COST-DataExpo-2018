@@ -46,6 +46,23 @@ The following sections describe the files and folders in each of the main
 folders in the repository
 
 
+###############################################################################
+#
+# 							Rmarkdown and RData
+#
+###############################################################################
+
+The main directory contains an Rmarkdown file and RData file that can be 
+used to create all of the tables and graphs in the paper in an HTML file. 
+
+# weather.RData: contains the data files needed to create the data files, 
+the fiftystate map, and special functions to perform the cluster analysis. 
+
+# weather_figures_and_tables.Rmd: an Rmarkdown file that creates all of the 
+figures and tables from the paper. 
+
+
+
 #==============================================================================
 
 
@@ -225,33 +242,35 @@ the clustering phase.
 #					           final_analysis
 ###############################################################################
 
-# finalCorBarChart.R: produces an early, alternative version of the 
-correlation glyph. 
-
 # finalCorBarChart2.R: creates the correlations glyphs used in the paper 
-and poster. 
+and poster. (Figure 4)
 
 # finalDendro.R: creates the dendrogram for the city clusters used in the 
-paper. 
+paper. (Figure 2)
 
 # finalGlypPlot: creates the seasonal glyph plots for the paper and poster.
+(Figure 6)
 
 # finalMapScript.R: creates the main map showing the cluster assignments
-for each city. 
+for each city. (Figure 1)
 
 # final_PCP.R: creates the parallel coordinate plot used in the poster and 
-paper. 
+paper. (Figure 3)
 
 # finalPointMicro.R: creates a final version of a micromap that we ended 
-up not using in the poster or paper. 
+up not using in the poster or paper. (Not in paper)
 
 # final_Random_Forests_VI.R: performs a variable importance analysis and 
 creates the parallel coordinate plots for variable importance used 
-in the paper a poster. 
+in the paper a poster. (Figure 7)
 
 # final_Scatterplot_Lag.R: creates the scatterplots that show the 
 relationship between min temp, max temp, and precipitation forecast errors. 
 It creates the plots for the exploratory analysis, poster, and paper. 
+(Figure 5)
+
+# sampleEllipse.R: creates the ellipse figure that is in the appendix. 
+(Figure 8)
 
 #==============================================================================
 

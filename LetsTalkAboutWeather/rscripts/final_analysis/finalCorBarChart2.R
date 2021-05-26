@@ -21,11 +21,10 @@
 # Read in relevant packages. 
 library(tidyverse)
 library(RColorBrewer)
-library(fiftystater)
 library(mapproj)
 library(latex2exp)
 
-data("fifty_states") # reload map for new figure.
+load("../../data/fifty_states.RData")
 marAdj <- c(0, 0, 0, 0)
 # Adjust the final plot margins as needed.
 plot.margin <- unit(marAdj, "cm")
@@ -387,7 +386,7 @@ legend <- ggplot(boxes, aes(x = x, y = y)) +
 #=============================================================================
 
 
-pdf("../../images/final/paper/corGlyphMapNew.pdf", width = 20, height = 12)
+pdf("../../images/final/paper/Fig4_corGlyphMapNew.pdf", width = 20, height = 12)
 gridExtra::grid.arrange(grobs = list(ggplotGrob(mapEllipse), ggplotGrob(legend)),
                         heights = c(0.9, 0.1))
 dev.off()
