@@ -171,9 +171,9 @@ pre code {
 </div>
 
 
-<p>This R Markdown document contains the code to recreate the tables and folders in our “Let’s talk about the weather”paper. Scripts with additional code are included in our github repository with a README that explains the flow to recreate and clean datasets, perform exploratory data analysis, and contain additional data and figures that were not presented in the paper or in the code below.</p>
-<p>The map data and other datasets needed to recreate the tables and figures from the table are included in an RData file. The map came from the R package “fiftystater”that was retired shortly after the Data Expo. The map has been included in the RData file for the ease of the reader.</p>
-<p>Some of the sizes of text and other objects in the plots have been resized so that they render properly in HTML. See the R scripts for each plot for the parameters used to create the PDF plots used in the paper. The name of the file that contains the original code is identified before each figure.</p>
+<p>This R Markdown document contains the code to recreate the tables and folders in our “Let’s talk about the weather” paper. Scripts with additional code are included in our github repository with a README that explains the flow to recreate and clean datasets, perform exploratory data analysis, and contain additional data and figures that were not presented in the paper or in the code below.</p>
+<p>The map data and other datasets needed to recreate the tables and figures from the table are included in an RData file. The map came from the R package “fiftystater” that was retired shortly after the Data Expo. The map has been included in the RData file for the ease of the reader.</p>
+<p>Some of the sizes of text and other objects in the plots have been resized so that they render properly in HTML. See the R scripts for each plot for the parameters used to create the PDF plots used in the paper. The name of the file that contains the original code is identified before each figure. All of the files can be found in the ./rscripts/final_analysis/ folder.</p>
 <div id="prepare-environment" class="section level3">
 <h3>Prepare environment</h3>
 <p>The first step is to load the RData file and the packages needed for this analysis. Note that each of the code chunks can be run separately as long as this one is run first.</p>
@@ -206,7 +206,7 @@ library(xtable)</code></pre>
 </div>
 <div id="table-1-weather-variables-and-ranges" class="section level3">
 <h3>Table 1: Weather variables and ranges</h3>
-<p>The following table shows the weather variables used in the analysis along with the units and ranges that were used to eliminate outliers. The * weather * datset was used to determine the final range of values, but the ranges are not the max and min values in the actual * weather * dataset. Thus, the table is not generated using the * weather * dataset.</p>
+<p>The following table shows the weather variables used in the analysis along with the units and ranges that were used to eliminate outliers. The <em>weather</em> datset was used to determine the final range of values, but the ranges are not the max and min values in the actual <em>weather</em> dataset. Thus, the table is not generated using the <em>weather</em> dataset.</p>
 <pre class="r"><code>col1 &lt;- c(&quot;Min/Max Temperature&quot;, &quot;Precipitation&quot;, &quot;Min/Max Dew Point&quot;, 
           &quot;Min/Max Humidity&quot;, &quot;Min/Max Sea Level Pressure&quot;, 
           &quot;Mean/Max Wind Speed&quot;, &quot;Min Visibility &quot;, &quot;Cloud Cover&quot;, 
@@ -417,7 +417,7 @@ grid.arrange(grobs = list(ggplotGrob(p2), ggplotGrob(legend)),
 </div>
 <div id="figure-2-dendrogram" class="section level3">
 <h3>Figure 2: Dendrogram</h3>
-<p>The following is a dendrogram of the clusters shown in Figure 1. The original code for the plot that was rendered in the paper is in the file “finalDendro.pdf”.</p>
+<p>The following is a dendrogram of the clusters shown in Figure 1. The original code for the plot that was rendered in the paper is in the file “finalDendro.R”.</p>
 <pre class="r"><code># Copy city dataset for further manipulation
 cluster2 &lt;- city
 cluster2$state &lt;- as.character(cluster2$state)
@@ -501,7 +501,7 @@ p1</code></pre>
 </div>
 <div id="figure-3-parallel-coordinate-plot-of-weather-variables-at-each-station" class="section level3">
 <h3>Figure 3: Parallel coordinate plot of weather variables at each station</h3>
-<p>The parallel coordinate plot has a line for each of the weather stations that shows the indicated summary statistic for each of the clustering variables. The lines are colored according to the cluster that they belong to. Stations in the Southwest cluster are emphasized. The original code for the plot that was rendered in the paper is in the file “final_PCP.pdf”.</p>
+<p>The parallel coordinate plot has a line for each of the weather stations that shows the indicated summary statistic for each of the clustering variables. The lines are colored according to the cluster that they belong to. Stations in the Southwest cluster are emphasized. The original code for the plot that was rendered in the paper is in the file “final_PCP.R”.</p>
 <pre class="r"><code># Copy map dataset for further manipulation
 cluster2 &lt;- map
 
@@ -641,7 +641,7 @@ grid.draw(rbind(rbind(ggplotGrob(p2), ggplotGrob(p1), size = &quot;last&quot;),
 </div>
 <div id="figure-4-correlation-glyph-plot" class="section level3">
 <h3>Figure 4: Correlation glyph plot</h3>
-<p>The correlation glyph plot shows the correlation between the weather prediction variables in each of the weather clusters. This plot creates glyphs and then places them on the map. Not only is this code a good resource for making glyphs, but it also demonstrates how to work around the difference between coordinate systems for the map and the glyphs so that the glyphs are not distorted. Original code for creating the pdf image used in the paper see the file “finalCorBarChart2.pdf”.</p>
+<p>The correlation glyph plot shows the correlation between the weather prediction variables in each of the weather clusters. This plot creates glyphs and then places them on the map. Not only is this code a good resource for making glyphs, but it also demonstrates how to work around the difference between coordinate systems for the map and the glyphs so that the glyphs are not distorted. Original code for creating the pdf image used in the paper see the file “finalCorBarChart2.R”.</p>
 <pre class="r"><code># Copy fifty_states dataset for further manipulation. This code alters the 
 # map data. The location and city datasets are also copied to preserve
 # the datasets for future analysis. 
@@ -871,7 +871,7 @@ mapEllipse &lt;- ggplot(tempEllipse) +
            fill = alpha(&quot;gray80&quot;, 0.5), color = alpha(&quot;gray60&quot;, 0.5),
            map = states) +
   expand_limits(x = states$long, y = states$lat) +
-  geom_polygon(aes(x = arrayAdj * x/adj + long, y = arrayAdj * y/adj + lat, 
+  geom_polygon(aes(x = arrayAdj * x / adj + long, y = arrayAdj * y / adj + lat, 
                    group = group, fill = factor(Cluster))) +
   # Add the reference grid lines.
   annotate(&quot;segment&quot;, 
@@ -996,7 +996,7 @@ grid.arrange(grobs = list(ggplotGrob(mapEllipse), ggplotGrob(legend)),
 </div>
 <div id="figure-5-scatterplots-linked-with-map" class="section level3">
 <h3>Figure 5: Scatterplots linked with map</h3>
-<p>These scatterplots are examples of graphs generated by our shiny app. The app allows the user to select points on the scatterplot and see where they are located on the map. Original code for creating the pdf image used in the paper see the file “final_Scatterplot_Lag.pdf”.</p>
+<p>These scatterplots are examples of graphs generated by our shiny app. The app allows the user to select points on the scatterplot and see where they are located on the map. Original code for creating the pdf image used in the paper see the file “final_Scatterplot_Lag.R”.</p>
 <pre class="r"><code># Control the sizes of the labels and titles
 size1 &lt;- 16 # Numbers
 size2 &lt;- 18 # Titles
@@ -1480,7 +1480,7 @@ dev.off()</code></pre>
 </div>
 <div id="figure-6-seasonal-glyph-plot" class="section level3">
 <h3>Figure 6: Seasonal glyph plot</h3>
-<p>This glyph plot not only provides the code for the plot in the paper, it is a good resource for creating glyphs and plotting them on a map. The coordinate system of the map distorts the glyphs, so the coordinates for the map and the glyphs need to be resolved. Original code for creating the pdf image used in the paper see the file “finalGlyphPlot.pdf”.</p>
+<p>This glyph plot not only provides the code for the plot in the paper, it is a good resource for creating glyphs and plotting them on a map. The coordinate system of the map distorts the glyphs, so the coordinates for the map and the glyphs need to be resolved. Original code for creating the pdf image used in the paper see the file “finalGlyphPlot.R”.</p>
 <pre class="r"><code># copy data for data wrangling
 states &lt;- fifty_states
 weatherSum &lt;- monthSum
@@ -2128,7 +2128,7 @@ grid.arrange(grobs = list(ggplotGrob(map8.2), ggplotGrob(tglyph.2),
 </div>
 <div id="figure-7-variable-importance-plot" class="section level3">
 <h3>Figure 7: Variable importance plot</h3>
-<p>Random forests was used on the weather data to determine which weather variables are most important in weather forecast accuracy. The code below performs some data cleaning, the random forests computation, and the code for the plot. Original code for creating the pdf image used in the paper see the file “final_GlyphPlot_Random_Forests_VI.pdf”.</p>
+<p>Random forests was used on the weather data to determine which weather variables are most important in weather forecast accuracy. The code below performs some data cleaning, the random forests computation, and the code for the plot. Original code for creating the pdf image used in the paper see the file “final_GlyphPlot_Random_Forests_VI.R”.</p>
 <pre class="r"><code># rename cityForecast for datset manipulation
 # clusters variable also used
 rf.dat &lt;- cityForecast
@@ -2351,7 +2351,7 @@ grid.draw(rbind(ggplotGrob(gmax2), ggplotGrob(legend), size = &quot;first&quot;)
 </div>
 <div id="figure-8-sample-ellipse" class="section level3">
 <h3>Figure 8: Sample ellipse</h3>
-<p>Original code for creating the pdf image used in the paper see the file “sampleEllipse.pdf”.</p>
+<p>Original code for creating the pdf image used in the paper see the file “sampleEllipse.R”.</p>
 <pre class="r"><code>theta &lt;- seq(0, 2 * pi, 0.001)
 rho &lt;- 0.5
 r &lt;- (1 - rho)^2 / (1 - sqrt(rho * (2 - rho)) * cos(theta - pi / 4))
