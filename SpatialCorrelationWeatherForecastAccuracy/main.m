@@ -145,27 +145,46 @@ end
 %% Section 3: Fit AR(1)-GARCH(1,1) model on coefficients of reduced basis
 
 % Fit AR-GARCH model on coefficients
-model = arima('Constant',0,'ARLags',1,'Distribution','t','Variance',garch(1,1));
 colIdx = 7;
 ModelFit(colIdx).EstMdl = cell(numBFred,1);
-for k = 1:numBFred
-    [ModelFit(colIdx).EstMdl{k},ModelFit(colIdx).EstParamCov{k}] = estimate(model,ModelFit(colIdx).reducedCoeff(:,k));
-end
-
-% Compute results for plotting
 n = ModelFit(colIdx).NumForecasts;
 ModelFit(colIdx).arcoeff = zeros(numBFred,1);
 ModelFit(colIdx).uk = zeros(n,numBFred);
 ModelFit(colIdx).condVk = zeros(n,numBFred);
 ModelFit(colIdx).DF = zeros(numBFred,1);
 ModelFit(colIdx).logLk = zeros(numBFred,1);
-for k = 1:numBFred
-    ModelFit(colIdx).arcoeff(k,1) = ModelFit(colIdx).EstMdl{k}.AR{1};
-    [ModelFit(colIdx).uk(:,k),~,ModelFit(colIdx).logLk] = infer(ModelFit(colIdx).EstMdl{k},ModelFit(colIdx).reducedCoeff(:,k));
-    ModelFit(colIdx).DF(k) = ModelFit(colIdx).EstMdl{k}.Distribution.DoF;
-    ModelFit(colIdx).condVk(:,k) = infer(ModelFit(colIdx).EstMdl{k}.Variance,ModelFit(colIdx).reducedCoeff(:,k));
+if contains(struct2array(ver),'Econometrics Toolbox')
+    % If Econometrics Toolbox is available, use it to fit the GARCH models
+    model = arima('Constant',0,'ARLags',1,'Distribution','t','Variance',garch(1,1));
+    for k = 1:numBFred
+        % Fit GARCH
+        [ModelFit(colIdx).EstMdl{k},ModelFit(colIdx).EstParamCov{k}] = estimate(model,ModelFit(colIdx).reducedCoeff(:,k));
+        
+        % Store results for plotting
+        ModelFit(colIdx).arcoeff(k,1) = ModelFit(colIdx).EstMdl{k}.AR{1};
+        [ModelFit(colIdx).uk(:,k),~,ModelFit(colIdx).logLk] = infer(ModelFit(colIdx).EstMdl{k},ModelFit(colIdx).reducedCoeff(:,k));
+        ModelFit(colIdx).DF(k) = ModelFit(colIdx).EstMdl{k}.Distribution.DoF;
+        ModelFit(colIdx).condVk(:,k) = infer(ModelFit(colIdx).EstMdl{k}.Variance,ModelFit(colIdx).reducedCoeff(:,k));
+    end
+    ModelFit(colIdx).ukstd = ModelFit(colIdx).uk./sqrt(ModelFit(colIdx).condVk);
+else
+    % If Econometrics Toolbox is not available, use Alexandros Gabrielsen's ARMAX-GARCH toolbox
+    addpath ARMAX_GARCH_K_SK_Toolbox
+    load('AlternativeGarchOptions.mat')
+    for k = 1:numBFred
+        % Fit GARCH
+        [parameters, stderrors, LLF, ht, resids, summary] = garch2(ModelFit(colIdx).reducedCoeff(:,k),'GARCH','T',1,0,0,1,1,0,[],options);
+    
+        % Store results for plotting
+        ModelFit(colIdx).arcoeff(k,1) = parameters(2);
+        ModelFit(colIdx).uk(2:end,k) = resids;
+        ModelFit(colIdx).logLk = LLF;
+        ModelFit(colIdx).DF(k) = parameters(6);
+        ModelFit(colIdx).condVk(1,k) = mean(ht);
+        ModelFit(colIdx).condVk(2:end,k) = ht;
+    end
+    ModelFit(colIdx).ukstd = ModelFit(colIdx).uk./sqrt(ModelFit(colIdx).condVk);
 end
-ModelFit(colIdx).ukstd = ModelFit(colIdx).uk./sqrt(ModelFit(colIdx).condVk);
 
 %% Section 4: Visualizations of results of AR-GARCH fit
 
@@ -216,15 +235,32 @@ slider_plot_generic(ModelFit(colIdx).DatesBeingForecasted,ModelFit(colIdx).ukstd
 
 % Plot ACF of Squared Innovations
 colIdx = 7;
-autocorr(ModelFit(colIdx).uk(:,1).^2)
+if contains(struct2array(ver),'Econometrics Toolbox')
+    % If Econometrics Toolbox is available, use its built-in autocorrelation plot
+    figure
+    autocorr(ModelFit(colIdx).uk(:,1).^2)
+else
+    % If Econometrics Toolbox is not available, use my own autocorrelation plot
+    myautocorr(ModelFit(colIdx).uk(:,1).^2)
+end
 title('ACF for Squared Innovations')
+xlabel('Lag')
 ylabel('Sample Autocorrelation of u_{1t}^2')
 
 % Plot ACF of Squared Standardized Innovations
 colIdx = 7;
-autocorr(ModelFit(colIdx).ukstd(:,1).^2)
+if contains(struct2array(ver),'Econometrics Toolbox')
+    % If Econometrics Toolbox is available, use its built-in autocorrelation plot
+    figure
+    autocorr(ModelFit(colIdx).ukstd(:,1).^2)
+else
+    % If Econometrics Toolbox is not available, use my own autocorrelation plot
+    myautocorr(ModelFit(colIdx).ukstd(:,1).^2)
+end
 title('ACF for Squared Standardized Innovations')
+xlabel('Lag')
 ylabel('Sample Autocorrelation of  [u_{1t}/n_{1t}]^2')
+
 
 % Correlogram before and after
 AllLon = MaxTemp(975,7).Lon;
