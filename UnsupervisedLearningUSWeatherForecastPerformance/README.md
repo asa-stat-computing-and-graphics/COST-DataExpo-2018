@@ -4,7 +4,7 @@ Using functional data unsupervised learning techniques, FPCA and clustering, to 
 #### This is the reproducible code package for the paper Unsupervised Learning on U.S. Weather Prediction Accuray. The repository includes the real and raw U.S. weather data, R code of real data, and R code for simulation study.
 
 ### Programming language of the project and execution system
-R and Rstudio, Windows 10
+R 4.1.0 and Latest Rstudio, Windows 10 (Please run under these environment to reproduce the plot and tables! Under other version or system, the result would be slightly different, and simulation might experience error
 
 ### Real and Raw Datasets
 1. forecast.zip
@@ -27,8 +27,8 @@ The file contains all the short names of states and the geolocation of the cente
 
 This the introduction the contents of the real data files 1. forecast.zip, 2. location.csv, and 3. histWeather.csv.
 
-### real_data_analysis.R and related output CSV files
-This is the R files including all the content related to real data analysis. It contains the following sections:
+### real_data_analysis_markdown.Rmd and related output CSV files
+This is the Rmd files including all the content related to real data analysis. It contains the following sections:
 
 1. Data importing and dataset merging
 2. Smooth FPCA on B-spline Non-parametric Regression
@@ -43,20 +43,20 @@ From this R files execultion, 3 more CSV files will be generated to save the out
 #### The package "fiftystater" is used for clustering result visualization on U.S. map. It may be unavailable on CRAN, so I attached the achieved fold of the package, the "fiftystater_1.0.1.tar.gz" in the Github repository.
  
 
-### simulation study analysis.R
-This is the R files including all the content related to simulation study. The main content of this file includes:
+### simulation_study_analysis_markdown.Rmd
+This is the Rmd files including all the content related to simulation study. The main content of this file includes:
 1. Functions for Data simulation and Analysis
 2. Smooth FPCA on B-spline Non-parametric Regression
 3. Clustering Number Selection Validation
 4. Clustering Validation Study
 
-### simulation on real analysis.R
+### simulation_on_real_analysis_markdown.Rmd
 This is the R files including all the content related to the analysis from the simulation based on real data. **Please run the code real_data_analysis.R first** for real application so as to get the output files from the real data application. The main content of this file includes:
 1. Functions for Data simulation and Analysis
 2. Clustering Number Selection Validation
 3. Clustering Validation Study
 
-### null case simulation.R
+### null_case_simulation_markdown.Rmd
 This is the R files including all the content related to the null case simulation study (detecting cluster number K = 1). The main content of this file includes:
 1. Functions for Data simulation and Analysis
 2. Clustering Number Selection Validation
