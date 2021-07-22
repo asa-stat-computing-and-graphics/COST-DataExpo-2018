@@ -835,7 +835,7 @@ plot.ci = function(result.df, original.ts, method){
 plot.ci(fpca.smooth, mindiff.state.1, "fem")
 #plot.ci(fpca.smooth, mindiff.state.1, "fem.icl")
 
-write.csv(fpca.smooth, file = 'real_analysis_result.csv',row.names = F)
+#write.csv(fpca.smooth, file = 'real_analysis_result.csv',row.names = F)
 ```
 
 #### 7. Visualization on Exception Curves
