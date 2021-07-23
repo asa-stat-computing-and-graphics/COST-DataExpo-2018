@@ -49,7 +49,7 @@ ipak <- function(pkg){
 # add new packages here
 packages <- c("ggplot2", "dplyr", "tidyverse", "tidyr", "geosphere",
               "ggridges","scales","geofacet","lubridate","fda","fda.usc","RColorBrewer",
-              "ggrepel","DT","forecast","maps","usmap",
+              "ggrepel","DT","forecast","maps","usmap","clue",
               "ggthemes","gridExtra","factoextra", "fiftystater", 
               "NbClust","funFEM","mapproj")
 ipak(packages)
@@ -269,14 +269,38 @@ err1.fd<-smooth.basis(argvals = mindiff.date.1, y = mindiff.state.mat.1, err1.ba
 
 ####### Figure 3 #######################################################
 
-par(mfrow=c(1,1))
-plot(err1.fd,ylab = "Absolute Prediction Error (F)", xlab = "date",cex.lab=1.65,cex.axis=1.4, lty = 0.5)
-lines(mean.fd(err1.fd),col = "red",lty = 2)
-
 ## get the smoothed data of 50 stats in 1033 days
 mindiff.smooth.err = eval.fd(mindiff.date.1, err1.fd)
 colnames(mindiff.smooth.err) = colnames(mindiff.state.1)
 write.csv(mindiff.smooth.err,"mindiff_state1_smooth.csv", row.names = F)
+
+mindiff_day1_nona <- read_csv("mindiff_day1_nona.csv")
+mindiff_state1_smooth <- read_csv("mindiff_state1_smooth.csv")
+
+smooth_curve_df = bind_cols(mindiff_day1_nona, mindiff_state1_smooth) %>%
+  rename(date = x)
+
+curve_plot_df = smooth_curve_df %>% 
+  pivot_longer(
+    cols = alabama:wyoming,
+    names_to = "state",
+    values_to = "temp"
+  ) 
+
+overall_mean_curve = smooth_curve_df %>% 
+  mutate(avg_temp = apply(smooth_curve_df[, 2:51], 1, mean)) %>% 
+  dplyr::select(date, avg_temp)
+
+fig_3 = curve_plot_df %>% 
+  ggplot() +
+  geom_line(aes(x = date, y = temp, group = state), col = "gray80") + 
+  geom_line(data = overall_mean_curve, 
+            aes(x = date, y = avg_temp), col = "red") + 
+  theme_light() + 
+  scale_x_date(date_breaks = "2 month", date_labels = "%Y-%m") +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1)) + 
+  ylab("Absolute prediction error (Â°F)") + xlab("Date")
+fig_3
 ```
 
 ### 3. Clustering
@@ -835,7 +859,41 @@ plot.ci = function(result.df, original.ts, method){
 plot.ci(fpca.smooth, mindiff.state.1, "fem")
 #plot.ci(fpca.smooth, mindiff.state.1, "fem.icl")
 
-#write.csv(fpca.smooth, file = 'real_analysis_result.csv',row.names = F)
+write.csv(fpca.smooth, file = 'real_analysis_result.csv',row.names = F)
+
+### Figure 6 ###
+real_analysis_result <- read_csv("real_analysis_result.csv")
+
+curve_plot_df = smooth_curve_df %>% 
+  pivot_longer(
+    cols = alabama:wyoming,
+    names_to = "state",
+    values_to = "temp"
+  ) %>% 
+  left_join(real_analysis_result %>% 
+              dplyr::select(state, cluster = fem.4) %>% 
+              mutate(cluster = paste0("Cluster ", cluster))) 
+
+overall_mean_curve = smooth_curve_df %>% 
+  mutate(avg_temp = apply(smooth_curve_df[, 2:51], 1, mean)) %>% 
+  dplyr::select(date, avg_temp)
+
+cluster_mean_curve = curve_plot_df %>% 
+  group_by(date, cluster) %>% 
+  summarise(avg_temp = mean(temp)) %>% 
+  ungroup()
+
+fig_6 = curve_plot_df %>% 
+  ggplot() +
+  geom_line(aes(x = date, y = temp, group = state), col = "gray80") + 
+  geom_line(data = cluster_mean_curve, 
+            aes(x = date, y = avg_temp), col = "red", lty = 2) + 
+  theme_light() +
+  scale_x_date(date_breaks = "2 month", date_labels = "%Y-%m") +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+  facet_wrap(~cluster) + 
+  ylab("Absolute prediction error (Â°F)") + xlab("Date")
+fig_6
 ```
 
 #### 7. Visualization on Exception Curves
