@@ -77,6 +77,7 @@ forecast <- read.table("forecast.dat", header=F, stringsAsFactors = F)
 colnames(forecast) = c("city_index","forecast_date","forecast_value","forecast_goal",
                        "forecast_made_on")
 ## We also provide rds format of forecast dataset, if you want to use that instead, please comment the above two line and run the code below
+## But we have not tried using this instead, so some error may appear in the latter code related to this data and may need some code adjusting
 #forecast = readRDS("forecast.rds")
                        
 forecast <- forecast %>% 
