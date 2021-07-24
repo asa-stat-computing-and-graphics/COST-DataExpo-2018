@@ -4,12 +4,14 @@ Using functional data unsupervised learning techniques, FPCA and clustering, to 
 #### This is the reproducible code package for the paper Unsupervised Learning on U.S. Weather Prediction Accuray. The repository includes the real and raw U.S. weather data, R code of real data, and R code for simulation study.
 
 ### Programming language of the project and execution system
-R 4.1.0 and Latest Rstudio, Windows 10 (Please run under these environment to reproduce the plot and tables! Under other version or system, the result would be slightly different, and simulation might experience error
+R 4.0.5 (or above!) and Windows 10 (Please run under these environment to reproduce the plot and tables! Under other version or system, the result would be slightly different, and simulation might experience error.
 
 ### Real and Raw Datasets
-1. forecast.zip
+1. forecast.zip and forecast.rds
 
-The file contains all the forecast records. Please get the forecast.dat file from it first.
+The file contains all the forecast records. To get the original format data (which is used in the real data analysis), please get the forecast.dat file from it first.
+
+We have saved the forecast.dat to forecast.rds with smaller size.
 
 2. location.csv
 
@@ -31,8 +33,10 @@ This the introduction the contents of the real data files 1. forecast.zip, 2. lo
 This is the Rmd files including all the content related to real data analysis. It contains the following sections:
 
 1. Data importing and dataset merging
-2. Smooth FPCA on B-spline Non-parametric Regression
-3. Clustering
+2. Data exploration (fig 1,2,3)
+3. Smooth FPCA on B-spline Non-parametric Regression (fig 4)
+4. Clustering
+5. Final Result Visualization (fig 5, 6, 7, table 1)
 
 From this R files execultion, 3 more CSV files will be generated to save the output of the real application:
 
