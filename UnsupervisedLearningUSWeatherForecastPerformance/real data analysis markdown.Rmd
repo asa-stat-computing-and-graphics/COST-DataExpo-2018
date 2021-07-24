@@ -76,6 +76,9 @@ hist=hist[-c(index),]
 forecast <- read.table("forecast.dat", header=F, stringsAsFactors = F)
 colnames(forecast) = c("city_index","forecast_date","forecast_value","forecast_goal",
                        "forecast_made_on")
+## We also provide rds format of forecast dataset, if you want to use that instead, please comment the above two line and run the code below
+#forecast = readRDS("forecast.rds")
+                       
 forecast <- forecast %>% 
   mutate(
     forecast_date = as.Date(forecast_date,format = "%Y-%m-%d"),
