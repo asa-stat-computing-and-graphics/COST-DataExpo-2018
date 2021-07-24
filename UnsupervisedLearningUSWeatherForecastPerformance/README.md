@@ -56,6 +56,26 @@ If you don't want to use this package, then please try package *usmap* and modif
 
 This functions works great in our team, so we keep and use it in all of our code. If you don't like it, please use general library() to load all the required packages in the *packages* list.  
 
+### simulation_on_real_analysis_markdown.Rmd
+This is the R files including all the content related to the analysis from the simulation based on real data. **Please run the code real_data_analysis.R first** for real application so as to get the output files from the real data application. The data files that would be used in this code are:
+
+1. mindiff_day1_nona.csv
+2. mindiff_state1_nona.csv
+3. real_analysis_result.csv
+ 
+The main content of this file includes:
+1. Functions for Data simulation and Analysis (figure 9)
+2. Clustering Number Selection Validation (table 4)
+3. Clustering Validation Study (table 5)
+
+#### The function "ipak" is also applied at the beginning of this code
+
+In addition, FunFEM would try multiple variance and covariance matrix form to get the best result. In some forms, the result would be diverge and you may see some warning or message like
+
+*Error in svd(ginv(t(G) %*% G %*% W) %*% (t(G) %*% Ttilde %*% t(Ttilde) %*% : infinite or missing values in ‘x’" “Error in svd(X) : infinite or missing values in ‘x’*
+
+This is not a real error and the code would keep running.
+
 ### simulation_study_analysis_markdown.Rmd
 This is the Rmd files including all the content related to simulation study. The main content of this file includes:
 1. Functions for Data simulation and Analysis
@@ -65,13 +85,11 @@ This is the Rmd files including all the content related to simulation study. The
 
 #### The function "ipak" is also applied at the beginning of this code
 
-### simulation_on_real_analysis_markdown.Rmd
-This is the R files including all the content related to the analysis from the simulation based on real data. **Please run the code real_data_analysis.R first** for real application so as to get the output files from the real data application. The main content of this file includes:
-1. Functions for Data simulation and Analysis
-2. Clustering Number Selection Validation
-3. Clustering Validation Study
+In addition, FunFEM would try multiple variance and covariance matrix form to get the best result. In some forms, the result would be diverge and you may see some warning or message like
 
-#### The function "ipak" is also applied at the beginning of this code
+*Error in svd(ginv(t(G) %*% G %*% W) %*% (t(G) %*% Ttilde %*% t(Ttilde) %*% : infinite or missing values in ‘x’" “Error in svd(X) : infinite or missing values in ‘x’*
+
+This is not a real error and the code would keep running.
 
 ### null_case_simulation_markdown.Rmd
 This is the R files including all the content related to the null case simulation study (detecting cluster number K = 1). The main content of this file includes:
@@ -79,3 +97,9 @@ This is the R files including all the content related to the null case simulatio
 2. Clustering Number Selection Validation
 
 #### The function "ipak" is also applied at the beginning of this code
+
+In addition, FunFEM would try multiple variance and covariance matrix form to get the best result. In some forms, the result would be diverge and you may see some warning or message like
+
+*Error in svd(ginv(t(G) %*% G %*% W) %*% (t(G) %*% Ttilde %*% t(Ttilde) %*% : infinite or missing values in ‘x’" “Error in svd(X) : infinite or missing values in ‘x’*
+
+This is not a real error and the code would keep running.
