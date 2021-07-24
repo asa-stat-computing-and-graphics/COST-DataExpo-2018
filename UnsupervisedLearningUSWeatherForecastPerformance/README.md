@@ -96,7 +96,7 @@ This is not a real error and the code would keep running.
 
 ### null_case_simulation_markdown.Rmd
 #### The output file in HTML format, *null_case_simulation_markdown.html* and final workspace after code execution, *null_case_simulation_output.rdata* are attached.
-This is the R files including all the content related to the null case simulation study (detecting cluster number K = 1), *which would take about 10 hours to run under ASUS laptop with 8th Gen Intel Core i5 and 32G RAM*.  This code is written to respond the Null Case study of reviwer 2. The main content of this file includes:
+This is the R files including all the content related to the null case simulation study (detecting cluster number K = 1), *which would take about 4 hours to run under ASUS laptop with 8th Gen Intel Core i5 and 32G RAM*.  This code is written to respond the Null Case study of reviwer 2. The main content of this file includes:
 
 1. Functions for Data simulation and Analysis
 2. Clustering Number Selection Validation (for final table in supplementary doc)
