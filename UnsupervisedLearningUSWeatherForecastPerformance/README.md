@@ -57,6 +57,7 @@ If you don't want to use this package, then please try package *usmap* and modif
 This functions works great in our team, so we keep and use it in all of our code. If you don't like it, please use general library() to load all the required packages in the *packages* list.  
 
 ### simulation_on_real_analysis_markdown.Rmd
+#### The output file in HTML format, *real-data-analysis-markdown.html* and final workspace after code execution, *simulation_on_real_data_output.rdata* are attached.
 This is the R files including all the content related to the analysis from the simulation based on real data, *which would take about 5 hours to run under ASUS laptop with 8th Gen Intel Core i5 and 32G RAM.* **Please run the code real_data_analysis.R first** for real application so as to get the output files from the real data application. The data files that would be used in this code are:
 
 1. mindiff_day1_nona.csv
@@ -77,6 +78,7 @@ In addition, FunFEM would try multiple variance and covariance matrix form to ge
 This is not a real error and the code would keep running.
 
 ### simulation_study_analysis_markdown.Rmd
+#### The final workspace after code execution, *simulation_study_analysis_output.rdata* are attached. But the HTML output file is too large to be attached
 This is the Rmd files including all the content related to simulation study, *which would take about 10 hours to run under ASUS laptop with 8th Gen Intel Core i5 and 32G RAM*. The main content of this file includes:
 
 1. Functions for Data simulation and Result Summary (Fig 8)
@@ -93,6 +95,7 @@ In addition, FunFEM would try multiple variance and covariance matrix form to ge
 This is not a real error and the code would keep running.
 
 ### null_case_simulation_markdown.Rmd
+#### The output file in HTML format, *null_case_simulation_markdown.html* and final workspace after code execution, *null_case_simulation_output.rdata* are attached.
 This is the R files including all the content related to the null case simulation study (detecting cluster number K = 1), *which would take about 10 hours to run under ASUS laptop with 8th Gen Intel Core i5 and 32G RAM*.  This code is written to respond the Null Case study of reviwer 2. The main content of this file includes:
 
 1. Functions for Data simulation and Analysis
