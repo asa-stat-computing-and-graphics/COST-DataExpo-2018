@@ -32,7 +32,9 @@ The file contains all the short names of states and the geolocation of the cente
 This the introduction the contents of the real data files 1. forecast.zip, 2. location.csv, and 3. histWeather.csv.
 
 ### real_data_analysis_markdown.Rmd and related output CSV files
-This is the Rmd files including all the content related to real data analysis. It contains the following sections:
+#### The output file in HTML format, real-data-analysis-markdown.html is also attached. (But we have not uploaded the workspace Rdata of all the final output, since the file is too large)
+
+This is the Rmd files including all the content related to real data analysis, which would take about 10 mins to run under ASUS laptop with 8th Gen Intel Core i5 and 32G RAM. It contains the following sections:
 
 1. Data importing and dataset merging
 2. Data exploration (fig 1,2,3)
@@ -40,13 +42,15 @@ This is the Rmd files including all the content related to real data analysis. I
 4. Clustering
 5. Final Result Visualization (fig 5, 6, 7, table 1)
 
-From this R files execultion, 3 more CSV files will be generated to save the output of the real application:
+#### From this R files execultion, 3 more CSV files will be generated to save the output of the real application, *which would be used in the simulation of real data later*.
 
 1. mindiff_day1_nona.csv: The date list with collected temperature difference data.
 2. mindiff_state1_nona.csv: The unsmoothed raw data of daily absoluted temperature difference of 50 U.S. states.
 3. real_analysis_result.csv: Final clustering result from real data analysis
 
-#### The package "fiftystater" is used for clustering result visualization on U.S. map. It may be unavailable on CRAN, so I attached the achieved fold of the package, the "fiftystater_1.0.1.tar.gz" in the Github repository. If you are under Windows system, it would be easy to be installed.
+#### The package "fiftystater" is used for clustering result visualization on U.S. map. It may be unavailable on CRAN, so I attached the achieved fold of the package, the "fiftystater_1.0.1.tar.gz" in the Github repository. Please install it in R first before running the code If you are under Windows system, it would be easy to be installed.
+
+If you don't want to use this package, then please try package *usmap* and modify the map plotting code at part 5
 
 #### In addition, we create a function "ipak" at the beginning for checking the existance of the required package. If the packages do not exist in the system, then installation of the packages would start; otherwise, the package would just loaded. You would be able to see whether all the required packages have been loaded in the end
 
