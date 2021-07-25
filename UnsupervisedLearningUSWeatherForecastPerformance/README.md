@@ -50,7 +50,7 @@ This is the Rmd files including all the content related to real data analysis, w
 
 #### The package "fiftystater" is used for clustering result visualization on U.S. map. It may be unavailable on CRAN, so I attached the achieved fold of the package, the "fiftystater_1.0.1.tar.gz" in the Github repository. Please install it in R first before running the code If you are under Windows system, it would be easy to be installed.
 
-If you don't want to use this package, then please try package *usmap* and modify the map plotting code at part 5
+If you don't want to use this package, then please try using the uploaded data file *"fifty_stater.rda"* or using package *usmap* and modify the map plotting code at part 5
 
 #### In addition, we create a function "ipak" at the beginning for checking the existance of the required package. If the packages do not exist in the system, then installation of the packages would start; otherwise, the package would just loaded. You would be able to see whether all the required packages have been loaded in the end
 
