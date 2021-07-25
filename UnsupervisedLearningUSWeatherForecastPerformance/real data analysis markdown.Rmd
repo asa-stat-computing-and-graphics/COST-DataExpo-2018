@@ -34,7 +34,7 @@ In addition, FunFEM would try multiple variance and covariance matrix form to ge
 This is not a real error and the code would keep running. 
 
 ## Coding Part for Real Data Analysis
-### 0. Installing required packages 
+### 0. Installing and loading required packages
 ipak is a function for checking the existance of the required package. If the packages do not exist in the system, then installation of the packages would start
 
 Since the fiftystater is no longer at Cran, so please download the fiftystater tar from Git and install through tar separately
