@@ -32,7 +32,7 @@ In addition, FunFEM would try multiple variance and covariance matrix form to ge
 This is not a real error and the code would keep running. 
 
 ## Coding Part for Real Data Analysis
-### 0. Installing required packages 
+### 0. Installing and loading required packages
 ```{r, warning=FALSE, message=FALSE}
 # ipak, a function for checking the the installation of the packages
 ipak <- function(pkg){
