@@ -56,6 +56,7 @@ ipak(packages)
 
 ## The package fiftystater is for the U.S map visualization, and it may be unavailable on CRAN
 ## So its achieved file is attached in the Github repository with the path 
+# load("fifty_states.rda")
 ```
 
 ### 1. Dataset importing and processing
